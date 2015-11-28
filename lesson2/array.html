@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>demo2</title>
+      <script src="../js/react.min.js"></script>
+      <script src="../js/JSXTransformer.js"></script>
+  </head>
+  <body>
+  <div id="container"></div>
+  <script type="text/jsx">
+  var names = ['a','b','c'];
+  React.render(<div>
+              {
+                names.map(function (name,index) {
+                  return <div>Hello, {name}--{index}</div>
+                })
+              }
+              </div>,
+              document.getElementById("container"));
+  </script>
+  </body>
+</html>

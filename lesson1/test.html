@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>react hello world</title>
+      <script src="../js/react.min.js"></script>
+      <script src="../js/JSXTransformer.js"></script>
+  </head>
+  <body>
+  <div id="example"></div>
+  <script type="text/jsx">
+  var Hello = React.createClass({
+	  	getInitialState:function(){
+	  		alert("init");
+	  		return {
+	  			opacity:0.5,
+	  			fontSize:'20px'
+	  		};
+	  	},
+	  	render:function(){
+	  		// style={this.state} 效果也一样
+  			return <div style={{opacity:this.state.opacity,fontSize:this.state.fontSize}}>Hello,{this.props.name}</div>
+  		},
+  		componentWillMount:function(){
+  			alert("will");
+  		},
+  		componentDidMount:function(){
+  			alert("did");
+  			var _self = this;
+  			setTimeout(function(){
+  				alert("我通过setState来改变自身的css了");
+  				_self.setState({
+  					opacity:1,
+  					fontSize:'40x'
+  				})
+  			},1000)
+  		}
+  })
+  React.render(<Hello name="world" />,
+  				document.getElementById("example")
+  	);
+      // React.render(
+      //     <h1>Hello World!</h1>,
+      //     document.getElementById("example"),
+      //     function(){
+      //         console.log("OK!")
+      //     }
+      // )
+  </script>
+  </body>
+</html>

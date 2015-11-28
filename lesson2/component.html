@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>demo4</title>
+      <script src="../js/react.min.js"></script>
+      <script src="../js/JSXTransformer.js"></script>
+  </head>
+  <body>
+  <div id="container"></div>
+  <script type="text/jsx">
+  var HelloMessage = React.createClass({
+    render: function() {
+      return <h1>Hello, {this.props.name}</h1>;
+    }
+  });
+
+  React.render(
+    <HelloMessage name="John" />,
+    document.getElementById('container')
+  );
+  </script>
+  </body>
+</html>

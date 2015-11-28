@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>demo10</title>
+      <script src="../js/react.min.js"></script>
+      <script src="../js/JSXTransformer.js"></script>
+  </head>
+  <body>
+  <div id="container"></div>
+  <script type="text/jsx">
+    var Hello = React.createClass({
+        getInitialState: function () {
+          alert("init");
+          return {
+            opacity: 1.0
+          };
+        },
+
+        componentDidMount: function () {
+          alert("did mount");
+          this.timer = setInterval(function () {
+            var opacity = this.state.opacity;
+            opacity -= .05;
+            if (opacity < 0.1) {
+              opacity = 1.0;
+            }
+            this.setState({
+              opacity: opacity
+            });
+          }.bind(this), 100);
+        },
+
+        render: function () {
+          // alert("render");
+
+          return (
+            <div style={{opacity: this.state.opacity}}>
+              Hello {this.props.name}
+            </div>
+          );
+        }
+      });
+
+      React.render(
+        <Hello name="world"/>,
+        document.body
+      );
+  </script>
+  </body>
+</html>

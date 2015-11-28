@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>demo5</title>
+      <script src="../js/react.min.js"></script>
+      <script src="../js/JSXTransformer.js"></script>
+  </head>
+  <body>
+  <div id="container"></div>
+  <script type="text/jsx">
+ var NotesList = React.createClass({
+        render: function() {
+          return (
+            <ol>
+            {
+              React.Children.map(this.props.children, function (child) {
+                return {child};
+              })
+            }
+            </ol>
+          );
+        }
+      });
+
+  React.render(
+    <NotesList>
+      <span>hello</span>
+      <span>world</span>
+    </NotesList>,
+    document.getElementById("container")
+  );
+  </script>
+  </body>
+</html>
