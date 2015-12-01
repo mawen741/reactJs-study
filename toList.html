@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>index.html</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+      <script src="js/react.min.js"></script>
+      <script src="js/JSXTransformer.js"></script>
+      <style>
+        #container{
+          margin-top: 20px;
+        }
+        .del{
+          color: red;
+          margin-left: 10px;
+        }
+      </style>
+  </head>
+  <body>
+  <div id="container"></div>
+  <div id="aaa"></div>
+<h1>hello world</h1>
+  <script type="text/jsx">
+      var TodoList = React.createClass({
+        HandleDel:function(){
+          var val = this.props.Missions;
+          var index = this.props.Index;
+          var flag = window.confirm('是否确认删除');
+          if(flag){
+                this.props.delTasks(index);
+          }
+        },
+        render:function(){
+          return (
+              <li>
+                <span>{this.props.Missions}</span>
+                <a href="javscript:void(0);" onClick={this.HandleDel} className="del">X</a>
+              </li>
+            );
+        }
+      });
+
+      var TodoTips = React.createClass({
+        render:function(){
+          var Row = this.props.RemainTask >0;
+          if(!Row){
+            return false;
+          }
+          return (
+             <p>你还有{this.props.RemainTask}项任务未做</p>
+            );
+        }
+      });
+      var TodoInput = React.createClass({
+        handleKeyUp:function(e){
+          var val = this.refs.InputSth.getDOMNode().value;
+          if(val && e.which == 13){
+              this.props.handleInputSth(val)
+              this.refs.InputSth.getDOMNode().value ='';
+          }
+        },
+        render:function(){
+          return (
+              <input type="text" ref="InputSth" onKeyUp={this.handleKeyUp} placeholder="input sth" className="form-control" />
+            );
+        }
+      }) 
+      var TodoBody = React.createClass({
+        getInitialState:function(){
+          return {
+            Mission:[]
+          }
+        },
+        handleInputSth:function(value){
+          this.setState({
+            Mission:this.state.Mission.concat(value)
+          })
+        },
+        delTask:function(index){
+         this.state.Mission.splice(index,1);
+           this.setState({
+            Mission:this.state.Mission
+          })
+        },
+        render:function(){
+          var _self = this;
+          var Rows = this.state.Mission.map(function(Mis,index){
+              return <TodoList Missions={Mis} Index={index} delTasks={_self.delTask}/>
+            })
+          return (
+              <div className="row">
+                <div className="col-lg-4 col-lg-offset-4">
+                 <TodoInput handleInputSth={this.handleInputSth} /> 
+                </div>
+               <div className="col-lg-4 col-lg-offset-4">
+                 <TodoTips RemainTask={this.state.Mission.length}/>
+               </div>
+                <div className="col-lg-4 col-lg-offset-4">
+                  <ul>
+                   {Rows}
+                  </ul>
+                </div>
+              </div>
+            );
+        }
+      });
+
+      var AllMission=[];
+      React.render(
+          <TodoBody AllMission={AllMission}/>,
+          document.getElementById("container")
+        )
+  </script>
+  </body>
+</html>

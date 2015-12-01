@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>index.html</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+      <script src="js/react.min.js"></script>
+      <script src="js/JSXTransformer.js"></script>
+      <style>
+          #container{
+            margin-top: 20px;
+          }
+          table tr td,table tr th{
+            text-align: center;
+          }
+      </style>
+  </head>
+  <body>
+  <div id="container"></div>
+<script type="text/jsx">
+  var EpisodeTd = React.createClass({
+    render:function(){
+      return (
+          <tr>
+            <td>{this.props.episode.title}</td>
+            <td><a href={this.props.episode.url}>{this.props.episode.link}</a></td>
+          </tr>
+        );
+    }
+  });
+
+  var EpisodeTable = React.createClass({
+    render:function(){
+      var FilterText = this.props.EpisodeFilterText
+      var rows = this.props.episode
+      .filter(function(episode){
+        // console.log(episode);
+        return episode.title.toLowerCase().indexOf(FilterText.toLowerCase()) > -1
+      })
+      .map(function(episode){
+        return <EpisodeTd episode={episode} />
+      })
+      return (
+        <table width="100%">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>link</th>
+              </tr>
+            </thead>
+            <tbody>
+             {rows}
+            </tbody>  
+          </table>
+        );
+    }
+  });
+
+  var EpisodeInput = React.createClass({
+    handleChange:function(){
+      this.props.EpisodeHandleInput(
+        this.refs.filterInput.getDOMNode().value
+        )
+    },
+    render:function(){
+      return (
+          <input type="text" ref="filterInput" onChange={this.handleChange} className="form-control" placeholder="input sth" />
+        );
+    }
+  })
+
+  var EpisodeBody =React.createClass({
+    getInitialState:function(){
+      return {
+        filterText:""
+      }
+    },
+    EpisodeHandleInput:function(filterText){
+      this.setState({
+        filterText:filterText
+      })
+    },
+    render:function(){
+      return (
+        <div className="row">
+          <div className="col-lg-4 col-lg-offset-4">
+            <EpisodeInput EpisodeHandleInput={this.EpisodeHandleInput}/>
+          </div>
+          <div className="col-lg-4 col-lg-offset-4">
+            <EpisodeTable episode={this.props.episode} EpisodeFilterText={this.state.filterText}/>
+          </div>
+        </div>
+        );
+    }
+  })
+var episode=[
+  {
+    title:"aaaaaa",
+    link:'百度一下',
+    url:"www.baidu1.com"
+  },{
+    title:"ssssss",
+    link:'百度一下2',
+    url:"www.baidu2.com"
+  },{
+    title:"dddddd",
+    link:'百度一下3',
+    url:"www.baidu3.com"
+  },{
+    title:"saasd",
+    link:'百度一下4',
+    url:"www.baidu4.com"
+  },{
+    title:"dasasd",
+    link:'百度一下5',
+    url:"www.baidu5.com"
+  },{
+    title:"zxcasd",
+    link:'百度一下6',
+    url:"www.baidu6.com"
+  },{
+    title:"asaa1qe",
+    link:'百度一下7',
+    url:"www.baidu7.com"
+  },{
+    title:"asaa1qe",
+    link:'百度一下8',
+    url:"www.baidu8.com"
+  },{
+    title:"asaa1qe",
+    link:'百度一下9',
+    url:"www.baidu9.com"
+  }
+]
+  React.render(
+    <EpisodeBody episode={episode}/>,
+    document.getElementById("container")
+    )
+</script>
+  </body>
+</html>
