@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>menu1.html</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+      <script src="js/react.min.js"></script>
+      <script src="js/JSXTransformer.js"></script>
+      <style>
+        #container{
+          margin-top: 20px;
+        }
+        ul.mainMenu li{
+          display: inline-block;
+          padding: 10px 20px;
+          width: 100px;
+          background-color: #01204f;
+          border-right:1px solid green;
+        }
+        ul.mainMenu li a{
+          color: #fff;
+          font-size: 24px;
+        }
+        ul.mainMenu li a:hover{
+          color:#C5A3A3;
+          text-decoration: none;
+        }
+        ul.secMenu{
+          position: absolute;
+          margin-left: -60px;
+          margin-top:10px;
+        }
+        ul.secMenu li{
+          padding: 0px 20px;
+          display: block;
+          border-top: 1px solid #dcdcdc;
+        }
+        ul.secMenu li a{
+          font-size: 20px;
+        }
+      </style>
+  </head>
+  <body>
+  <div id="container">
+      <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+            <ul class="mainMenu">
+              <li><a href="javascript:;">新闻</a>
+                    <ul class="secMenu">
+                      <li><a href="">新闻1</a></li>
+                      <li><a href="">新闻2</a></li>
+                      <li><a href="">新闻3</a></li>
+                    </ul>
+              </li><!-- 
+               --><li><a href="javascript:;">文章</a>
+                    <ul class="secMenu">
+                      <li><a href="">文章1</a></li>
+                      <li><a href="">文章2</a></li>
+                      <li><a href="">文章3</a></li>
+                    </ul>
+               </li><!-- 
+               --><li><a href="javascript:;">语法</a>
+                     <ul class="secMenu">
+                      <li><a href="">语法1</a></li>
+                      <li><a href="">语法2</a></li>
+                      <li><a href="">语法3</a></li>
+                    </ul>
+               </li><!-- 
+               --><li><a href="javascript:;">单词</a>
+                    <ul class="secMenu">
+                      <li><a href="">单词1</a></li>
+                      <li><a href="">单词2</a></li>
+                      <li><a href="">单词3</a></li>
+                    </ul>
+               </li><!-- 
+               --><li><a href="javascript:;">听写</a>
+                   <ul class="secMenu">
+                      <li><a href="">听写1</a></li>
+                      <li><a href="">听写2</a></li>
+                      <li><a href="">听写3</a></li>
+                    </ul>
+              </li>
+            </ul>
+        </div>
+      </div>
+
+  </div>
+  </body>
+
+  <script type="text/jsx">
+  
+  </script>
+</html>
