@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>index.html</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+      <script src="js/react.min.js"></script>
+      <script src="js/JSXTransformer.js"></script>
+      <style>
+        #container{
+          margin-top: 20px;
+        }
+        .sectionTitle a:hover{
+          text-decoration: none;
+        }
+        .sectionTitle a{
+          display: block;
+          background:rgba(222,222,222,0.5);
+          padding: 5px;
+          margin-top: 2px;
+        }
+        .sectionContent{
+          padding: 10px;
+          border: 1px solid #d4d4d4;
+        }
+        .none{
+          display: none;
+        }
+      </style>
+  </head>
+  <body>
+  <div id="container"></div>
+  </body>
+
+  <script type="text/jsx">
+  var AccoContent = React.createClass({
+    handleClick:function(){
+      this.props.ChangePage(this.props.Index);
+    },
+    render:function(){
+      return (
+          <div>
+            <div className="sectionTitle" onClick={this.handleClick}><a href="javascript:">{this.props.Obj.title}</a></div>
+            <div className={this.props.C}>{this.props.Obj.content}</div>
+          </div>
+        );
+    }
+  });
+  
+  var AccoBody = React.createClass({
+    getInitialState:function(){
+      return {
+        DefaultPage:0
+      }
+    },
+    ChangePage:function(index){
+      this.setState({
+        DefaultPage:index
+      })
+    },
+    render:function(){
+      var defaultP = this.state.DefaultPage;
+      var _self = this;
+      var row = this.props.Arr.map(function(obj,index){
+          return index == defaultP?<AccoContent Obj={obj} Index={index} ChangePage={_self.ChangePage} C="sectionContent" />:<AccoContent Obj={obj} Index={index} C="sectionContent none" ChangePage={_self.ChangePage} />;
+      })
+      return (
+        <div className="col-lg-8 col-lg-offset-2">
+           <div>
+              {row}
+           </div>
+        </div>
+        );
+    }
+  });
+  var Arr = [
+          {
+            title:"Section1",
+            content:"This is Section1 This is Section1 This is Section1 This is Section1 This is Section1 This is Section1 This is Section1"
+          },{
+            title:"Section2",
+            content:"This is Section2 This is Section2 This is Section2 This is Section2 This is Section2 This is Section2 This is Section2"
+          },{
+            title:"Section3",
+            content:"This is Section3 This is Section3 This is Section3 This is Section3 This is Section3 This is Section3 This is Section3"
+          },{
+            title:"Section4",
+            content:"This is Section4 This is Section4 This is Section4 This is Section4 This is Section4 This is Section4 This is Section4"
+          }
+  ]
+
+    React.render(
+      <AccoBody Arr={Arr}/>,
+      document.getElementById("container")
+      )
+  </script>
+</html>
