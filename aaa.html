@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+	<script src="js/react.min.js"></script>
+	<script src="js/JSXTransformer.js"></script>
+	<style>
+	#container{
+		margin-top: 10px;
+	}
+	.col-lg-5{
+	          border:1px dashed #dcdcdc;
+	          text-align: center;
+	          padding: 20px 0px;
+	          height: 500px;
+	        }
+	   .bigDiv{
+	   	width: 500px;
+	   	height: 500px;
+	   	background-color: green;
+	   }     
+	</style>
+</head>
+<body>
+<div id="container">
+	
+</div>
+	<script type="text/jsx">
+		var Component1 = React.createClass({
+			aaa:function(){
+				console.log(this.refs.btn2.getDOMNode());
+
+			},
+			render:function(){
+				// console.log(this.refs.btn2.getDOMNode());
+				var newHandle = this.props.handleClick.bind(this,'123');
+				return (
+						<div >
+							<button type="button" ref="btn2" onClick={newHandle}>点我，点我</button>
+						</div>
+					);
+			}
+		});
+
+		var Component2 = React.createClass({
+			handleClick:function(e,str){
+				 // e.stopPropagation();  
+				 alert(str);
+			},
+			render:function(){
+				// var newHandle = this.props.handleClick(this.refs.div1.getDOMNode(),'456');
+				return (
+						<div onClick={this.handleClick} ref="div1" className="bigDiv">
+							<Component1 handleClick={this.handleClick}/>
+						</div>
+					);
+			}
+		});
+		React.render(
+			<Component2 />,
+			document.getElementById("container")
+			)
+	</script>
+</body>
+</html>

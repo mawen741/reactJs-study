@@ -10,13 +10,62 @@
         #container{
           margin-top: 20px;
         }
-        ul.mainMenu li{
+        .mainMenu{
           display: inline-block;
-          padding: 10px 20px;
-          width: 100px;
-          background-color: #01204f;
-          border-right:1px solid green;
+          padding: 0px;
         }
+        ul li{list-style-type: none;}
+        /*竖着的情况*/
+
+           ul.mainMenu li{
+            padding: 5px 10px;
+            width: 100px;
+            background-color: #01204f;
+            border-bottom:1px solid green;
+            cursor: pointer;
+            text-align: center;
+          }
+          ul.secMenu{
+          position: absolute;
+          margin-left: 50px;
+          margin-top: -35px;
+        }
+        ul.secMenu li{
+          padding: 0px 20px;
+          display: block;
+        }
+        ul.ThiMenu{
+            position: absolute;
+            margin-top: -22px;
+            margin-left: 40px;
+        }
+        /*
+          横着的情况
+          ul.mainMenu li{
+            display: inline-block;
+            padding: 10px 20px;
+            width: 100px;
+            background-color: #01204f;
+            border-right:1px solid green;
+            cursor: pointer;
+          }
+          ul.secMenu{
+            position: absolute;
+            margin-left: -60px;
+            margin-top:10px;
+          }
+          ul.secMenu li{
+            padding: 0px 20px;
+            display: block;
+            border-top: 1px solid #dcdcdc;
+          }
+          ul.ThiMenu{
+            position: absolute;
+            margin-top: -30px;
+            margin-left: 40px;
+          }
+         */
+        
         ul.mainMenu li a{
           color: #fff;
           font-size: 24px;
@@ -25,69 +74,413 @@
           color:#C5A3A3;
           text-decoration: none;
         }
-        ul.secMenu{
-          position: absolute;
-          margin-left: -60px;
-          margin-top:10px;
-        }
-        ul.secMenu li{
-          padding: 0px 20px;
-          display: block;
-          border-top: 1px solid #dcdcdc;
-        }
+        
         ul.secMenu li a{
           font-size: 20px;
+        }
+        
+        ul.ThiMenu li a{
+          font-size: 14px;
+          color: #fff;
+        }
+        .none{
+          display: none;
         }
       </style>
   </head>
   <body>
-  <div id="container">
-      <div class="row">
-        <div class="col-lg-6 col-lg-offset-3">
-            <ul class="mainMenu">
-              <li><a href="javascript:;">新闻</a>
-                    <ul class="secMenu">
-                      <li><a href="">新闻1</a></li>
-                      <li><a href="">新闻2</a></li>
-                      <li><a href="">新闻3</a></li>
-                    </ul>
-              </li><!-- 
-               --><li><a href="javascript:;">文章</a>
-                    <ul class="secMenu">
-                      <li><a href="">文章1</a></li>
-                      <li><a href="">文章2</a></li>
-                      <li><a href="">文章3</a></li>
-                    </ul>
-               </li><!-- 
-               --><li><a href="javascript:;">语法</a>
-                     <ul class="secMenu">
-                      <li><a href="">语法1</a></li>
-                      <li><a href="">语法2</a></li>
-                      <li><a href="">语法3</a></li>
-                    </ul>
-               </li><!-- 
-               --><li><a href="javascript:;">单词</a>
-                    <ul class="secMenu">
-                      <li><a href="">单词1</a></li>
-                      <li><a href="">单词2</a></li>
-                      <li><a href="">单词3</a></li>
-                    </ul>
-               </li><!-- 
-               --><li><a href="javascript:;">听写</a>
-                   <ul class="secMenu">
-                      <li><a href="">听写1</a></li>
-                      <li><a href="">听写2</a></li>
-                      <li><a href="">听写3</a></li>
-                    </ul>
-              </li>
-            </ul>
-        </div>
-      </div>
-
-  </div>
+  <div id="container"></div>
   </body>
 
-  <script type="text/jsx">
-  
-  </script>
+    <script type="text/jsx">
+    /**
+     * [render description]  返回第三级菜单的li
+     * @param  {Object} ){   name  url                  
+     * @return {[type]}     三级（最后以及菜单）
+     */
+    var ThiMenu = React.createClass({
+      render:function(){
+        return (
+              <li><a href={this.props.name.url} target="_blank">{this.props.name.name}</a></li>
+          );
+      }
+    });
+
+    /**
+     * [getInitialState description] 获取当前选择的二级菜单index  默认为空
+     * @param  {[type]}                                                                               
+     * @param  {[type]}                
+     * @param  {[type]}                                                                       
+     * @return {[type]}   判断LastUrl是否存在，若没有子元素了，则二级菜单的url一定要添加上，否则根据需要显示二级菜单的url                             
+     */
+    var SecMenu = React.createClass({
+      getInitialState:function(){
+        return {
+          CurrentIndex:""
+        }
+      },
+      HandleMouserEnter:function(){
+        this.props.HandleMouserEnter(this.props.Index)
+      },
+      render:function(){
+        var ThiRow = this.props.ThiMenuList.map(function(ThiMenuListItem,index){
+          return <ThiMenu name={ThiMenuListItem} Index={index}/>
+        });
+        var FinalUrl = this.props.LastUrl?this.props.LastUrl:this.props.NextUrl;
+        return (
+              <li onMouseEnter={this.HandleMouserEnter}>
+                  <a href={FinalUrl} target="_blank">{this.props.name}</a>
+                  <ul className={this.props.ClassName}>
+                    {ThiRow}
+                  </ul>
+              </li>
+           
+          );
+      }
+    });
+    /**
+     * [getInitialState description] 获取当前选择的一级菜单index  默认为空
+     * @param  {[type]}                                           
+     * @param  {[type]}           一级菜单生成                               
+     * @return {[type]}                                     
+     */
+    var FirMenu = React.createClass({
+      getInitialState:function(){
+        return {
+            CurrentIndex:""
+        };
+      },
+      HandleMouserEnter:function(index){
+        this.props.HandleMouserEnter(this.props.Index);
+         this.setState({
+            CurrentIndex:index
+          })
+      },
+      render:function(){
+        var _self = this;
+        var SecRow = this.props.SecMenuList.map(function(SecMenuListItem,index){
+          var LastUrl;
+          if(!SecMenuListItem.child || !SecMenuListItem.child.length){
+             LastUrl = SecMenuListItem.url || "";
+          }
+          var ClassName = _self.state.CurrentIndex === index?"ThiMenu":"ThiMenu none";
+          var NextUrl = _self.props.SecUrlOpen === true?SecMenuListItem.url?SecMenuListItem.url:"javascript:;":"javascript:;";
+          return <SecMenu name={SecMenuListItem.name} ThiMenuList={SecMenuListItem.child} Index={index} ClassName={ClassName} HandleMouserEnter={_self.HandleMouserEnter} NextUrl={NextUrl} LastUrl={LastUrl}/>;
+        });
+        /**
+          判断是否还存在子元素，如果不存在，则一定会显示当前链接
+         */
+        var FinalUrl = this.props.LastUrl?this.props.LastUrl:this.props.NextUrl;
+        return (
+            <li onMouseEnter={this.HandleMouserEnter}>
+              <a href={FinalUrl}>{this.props.name}</a>
+              <ul className={this.props.ClassName}>
+                {SecRow}
+              </ul>
+            </li>
+          );
+      }
+    });
+
+  /**
+   * [getInitialState description]  主体结构生成。并加载第一级菜单，其余的一次添加
+   * @param  {[type]}                              
+   * @return {[type]}                                    
+   */
+    var MainMenu = React.createClass({
+      getInitialState:function(){
+        return {
+            CurrentIndex:"",
+            closeMenuTimer:""
+        };
+      },
+      HandleMouserEnter:function(index){
+        this.BreakMouseLeave();
+        this.setState({
+          CurrentIndex:index
+        })
+      },
+      HandleMouserLeave:function(){
+        var _self = this;
+         _self.setState({
+          closeMenuTimer:setTimeout(function(){
+              _self.setState({
+                CurrentIndex:""
+              })
+          },400)
+         })
+      },
+      BreakMouseLeave:function(){
+        clearTimeout(this.state.closeMenuTimer);
+      },
+      render:function(){
+        var _self = this;
+        var FirRow = this.props.MenuArr.map(function(MenuList,index){
+          var LastUrl;
+          if(!MenuList.child || !MenuList.child.length){
+             LastUrl = MenuList.url || "";
+          }
+          var ClassName = _self.state.CurrentIndex === index?"secMenu":"secMenu none";
+          var NextUrl = _self.props.FirUrlOpen === true?MenuList.url?MenuList.url:"javascript:;":"javascript:;";
+            return <FirMenu name={MenuList.name} SecMenuList={MenuList.child} Index={index} ClassName={ClassName} HandleMouserEnter={_self.HandleMouserEnter} SecUrlOpen={_self.props.SecUrlOpen} NextUrl={NextUrl} LastUrl={LastUrl} />
+        });
+        return (
+            <div className="row">
+              <div className="col-lg-6 col-lg-offset-3">
+                  <ul className="mainMenu" onMouseLeave={this.HandleMouserLeave}>
+                    {FirRow}
+                  </ul>
+              </div>
+            </div>
+          );
+      }
+    })
+      var MenuArr = [
+          {
+            name:"新闻",
+            child:[
+                {
+                  name:"新闻1",
+                  child:[{
+                    name:"新闻11",
+                    url:"www.baidu.com"
+                  },{
+                    name:"新闻12",
+                    url:"www.baidu2.com"
+                  },{
+                    name:"新闻13",
+                    url:"www.baidu3.com"
+                  },]
+                },
+                {
+                  name:"新闻2",
+                  child:[{
+                    name:"新闻21",
+                    url:"www.baidu21.com"
+                  },{
+                    name:"新闻22",
+                    url:"www.baidu22.com"
+                  },{
+                    name:"新闻23",
+                    url:"www.baidu23.com"
+                  }]
+                },
+                {
+                  name:"新闻3",
+                  child:[{
+                    name:"新闻31",
+                    url:"www.baidu31.com"
+                  },{
+                    name:"新闻32",
+                    url:"www.baidu32.com"
+                  },{
+                    name:"新闻33",
+                    url:"www.baidu33.com"
+                  }]
+                }
+            ]
+          },{
+            name:"文章",
+            child:[
+                {
+                  name:"文章1",
+                  child:[{
+                    name:"文章11",
+                    url:"www.baidu11.com"
+                  },{
+                    name:"文章12",
+                    url:"www.baidu12.com"
+                  },{
+                    name:"文章13",
+                    url:"www.baidu13.com"
+                  }]
+                },
+                {
+                  name:"文章2",
+                  child:[{
+                    name:"文章21",
+                    url:"www.baidu21.com"
+                  },{
+                    name:"文章22",
+                    url:"www.baidu22.com"
+                  },{
+                    name:"文章23",
+                    url:"www.baidu23.com"
+                  }]
+                },
+                {
+                  name:"文章3",
+                  child:[{
+                    name:"文章31",
+                    url:"www.baidu31.com"
+                  },{
+                    name:"文章32",
+                    url:"www.baidu32.com"
+                  },{
+                    name:"文章33",
+                    url:"www.baidu33.com"
+                  }]
+                }
+            ]
+          },{
+            name:"语法",
+            child:[
+                {
+                  name:"语法1",
+                  child:[{
+                    name:"语法11",
+                    url:"www.baidu11.com"
+                  },{
+                    name:"语法12",
+                    url:"www.baidu12.com"
+                  },{
+                    name:"语法13",
+                    url:"www.baidu13.com"
+                  }]
+                },
+                {
+                  name:"语法2",
+                  child:[{
+                    name:"语法21",
+                    url:"www.baidu.com"
+                  },{
+                    name:"语法22",
+                    url:"www.baidu.com"
+                  },{
+                    name:"语法23",
+                    url:"www.baidu.com"
+                  }]
+                },
+                {
+                  name:"语法3",
+                  child:[{
+                    name:"语法31",
+                    url:"www.baidu.com"
+                  },{
+                    name:"语法32",
+                    url:"www.baidu.com"
+                  },{
+                    name:"语法33",
+                    url:"www.baidu.com"
+                  }]
+                }
+            ]
+          },{
+            name:"单词",
+            url:"www.danci.com",
+            child:[
+                {
+                  name:"单词1",
+                  child:[{
+                    name:"单词11",
+                    url:"www.baidu.com"
+                  },{
+                    name:"单词12",
+                    url:"www.baidu.com"
+                  },{
+                    name:"单词13",
+                    url:"www.baidu.com"
+                  }]
+                },
+                {
+                  name:"单词2",
+                  child:[{
+                    name:"单词21",
+                    url:"www.baidu.com"
+                  },{
+                    name:"单词22",
+                    url:"www.baidu.com"
+                  },{
+                    name:"单词23",
+                    url:"www.baidu.com"
+                  }]
+                },
+                {
+                  name:"单词3",
+                  child:[{
+                    name:"单词31",
+                    url:"www.baidu.com"
+                  },{
+                    name:"单词32",
+                    url:"www.baidu.com"
+                  },{
+                    name:"单词33",
+                    url:"www.baidu.com"
+                  }]
+                }
+            ]
+          },{
+            name:"听写",
+            child:[
+                {
+                  name:"听写1",
+                  child:[{
+                    name:"听写11",
+                    url:"www.baidu.com"
+                  },{
+                    name:"听写12",
+                    url:"www.baidu.com"
+                  },{
+                    name:"听写13",
+                    url:"www.baidu.com"
+                  }]
+                },
+                {
+                  name:"听写2",
+                  child:[{
+                    name:"听写21",
+                    url:"www.baidu.com"
+                  },{
+                    name:"听写22",
+                    url:"www.baidu.com"
+                  },{
+                    name:"听写23",
+                    url:"www.baidu.com"
+                  }]
+                },
+                {
+                  name:"听写3",
+                  child:[{
+                    name:"听写31",
+                    url:"www.baidu.com"
+                  },{
+                    name:"听写32",
+                    url:"www.baidu.com"
+                  },{
+                    name:"听写33",
+                    url:"www.baidu.com"
+                  }]
+                }
+            ]
+          },{
+            name:"音标",
+            url:"www.facebook.com",
+            child:[{
+                  name:"音标1",
+                  child:[{
+                    name:"音标11",
+                    url:"www.baidu.com"
+                  },{
+                    name:"音标12",
+                    url:"www.baidu.com"
+                  },{
+                    name:"音标13",
+                    url:"www.baidu.com"
+                  }]
+                }]
+          }
+      ];
+
+      /**
+       * [MenuArr description] 启动程序，添加节点
+       * param:MenuArr 主体菜单arr
+       * param:FirUrlOpen 是否显示一级菜单的url
+       * param:SecUrlOpen 是否显示二级菜单的url
+       * @type {Object}
+       */
+      React.render(
+          <MainMenu MenuArr={MenuArr} FirUrlOpen={true} SecUrlOpen={false}/>,  //FirUrlOpen一级菜单是否要加链接  SecUrlOpen二级菜单是否要加链接
+          document.getElementById("container")
+        )
+    </script>
 </html>

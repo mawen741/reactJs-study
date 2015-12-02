@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>menu1.html</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+      <script src="js/react.min.js"></script>
+      <script src="js/JSXTransformer.js"></script>
+      <style>
+      *{
+        margin: 0;
+        padding: 0;
+      }
+        #container{
+          margin-top: 20px;
+        }
+        .col-lg-5{
+          border:1px dashed #dcdcdc;
+          text-align: center;
+          padding: 20px 0px;
+          height: 500px;
+        }
+        ul li{list-style-type: none;}
+        a{text-decoration: none;}
+        .selectmenu-button{
+          display: inline-block;
+          width: 150px;
+          height: 30px;
+          line-height: 30px;
+          border:1px solid #d1d1d1;
+          border-radius: 5px;
+          background:rgba(110,110,110,0.1);
+          text-align: center;
+        }
+        .selectmenu-button:hover{
+          text-decoration: none;
+          color: #808080;
+          background:rgba(110,110,110,0.1);
+        }
+        .selectmenu-ul{
+          position: absolute;
+          width: 150px;
+          left: 50%;
+          margin-left: -75px;
+          border:1px solid #d1d1d1;
+          border-top: none;
+        }
+        .selectmenu-ul li{
+          padding: 2px 0px;
+          border-top: 1px solid #d1d1d1;
+          text-align: center;
+          cursor: pointer;
+        }
+        .selectmenu-ul li:hover{
+          background:rgba(110,110,110,0.1);
+        }
+        .none{
+          display: none;
+        }
+      </style>
+  </head>
+  <body>
+  <div id="container">
+     <!--  <div class="row">
+        <div class="col-lg-2 col-lg-offset-5">
+          <a class="selectmenu-button" href="javascript:;">点击选择∨</a>
+          <ul class="selectmenu-ul none">
+            <li>选项1</li>
+            <li>选项2</li>
+            <li>选项3</li>
+            <li>选项4</li>
+          </ul>
+        </div>
+      </div> -->
+
+  </div>
+  </body>
+
+    <script type="text/jsx">
+      var Selectmenu = React.createClass({
+        HandleClick:function(){
+          this.props.HandleClick("handle");
+        },
+        render:function(){
+          return (
+              <a className="selectmenu-button" href="javascript:;" onClick={this.HandleClick}>{this.props.SelectmenuHtml}</a>
+            );
+        }
+      });
+      var SelectContent = React.createClass({
+        ChooseItem:function(){
+          this.props.ChangeSelectmenuHtml(this.props.Item);
+        },
+        render:function(){
+          return (
+                  <li onClick={this.ChooseItem}>{this.props.Item}</li>
+            );
+        }
+      });
+
+      var SelectmenuBody = React.createClass({
+        getInitialState:function(){
+          return {
+            InitSelectmenuHtml:"点击选择↓",
+            display: true
+          };
+        },
+        HandleClick:function(e,State){
+          e.stopPropagation();
+          this.setState({
+            display:State?!this.state.display:true
+          })
+        },
+        ChangeSelectmenuHtml:function(html){
+          this.setState({
+            InitSelectmenuHtml:html,
+            display:true
+          })
+        },
+        render:function(){
+          var _self = this;
+          var ListItemRow = this.props.ListItem.map(function(item){
+            return <SelectContent Item={item} ChangeSelectmenuHtml={_self.ChangeSelectmenuHtml} />
+          })
+          var ClassName = this.state.display === true ?"selectmenu-ul none":"selectmenu-ul ";
+          return (
+                <div className="row">
+                  <div className="col-lg-5 col-lg-offset-3" onClick={this.HandleClick}>
+                    <Selectmenu HandleClick={this.HandleClick} SelectmenuHtml={this.state.InitSelectmenuHtml} />
+                    <ul className={ClassName}>
+                      {ListItemRow}
+                    </ul>
+                  </div>
+                </div>
+            );
+        }
+      });
+      var ListItem = ["选项1","选项2","选项3","选项4","选项5"];
+      React.render(
+          <SelectmenuBody ListItem={ListItem} />,
+          document.getElementById("container")
+        )
+    </script>
+</html>
