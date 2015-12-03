@@ -105,8 +105,7 @@
             display: true
           };
         },
-        HandleClick:function(e,State){
-          e.stopPropagation();
+        HandleClick:function(State){
           this.setState({
             display:State?!this.state.display:true
           })
