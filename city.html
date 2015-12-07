@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>city.html--三级联动</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+      <script src="js/react.js"></script>
+      <script src="js/JSXTransformer.js"></script>
+      <style>
+        #container{
+          margin-top: 20px;
+        }
+        select{
+          margin-left: 20px;
+        }
+      </style>
+  </head>
+  <body>
+  <div id="container"></div>
+  </body>
+
+    <script type="text/jsx">
+    var OptionMap = React.createClass({
+      render:function(){
+        return (
+              <option value={this.props.Index}>{this.props.name}</option>
+        );
+      }
+    });
+
+    var MainMap = React.createClass({
+      getInitialState:function(){
+        return {
+          firstName:0,
+          secondName:0,
+          resetSec:0,
+          resetThi:0
+        }
+      },
+      FirCityChange:function(){ //一级城市被选中
+        this.setState({
+          firstName:this.refs.first.value
+        });
+        this.refs.second.value =0;
+      },
+      SecCityChange:function(){ //二级城市被选中
+        this.setState({
+          secondName:this.refs.second.value
+        });
+         this.refs.third.value = 0;
+        
+      },
+      render:function(){
+        var _self = this;
+        var citys = _self.props.citys;
+        var FirRow = citys.map(function(citys,index){
+          return <OptionMap name={citys.name} Index={index} key={index}/>
+        });
+        var SecRow = citys[this.state.firstName].array.map(function(secCitys,index){
+          return <OptionMap name={secCitys.name} Index={index} key={index} />
+        });
+        var ThiRow = citys[this.state.firstName].array[this.state.secondName].array.map(function(thrCitys,index){
+          return <OptionMap name={thrCitys} Index={index} key={index} />
+        });
+        var realThiRow;
+        if({ThiRow}.ThiRow.length > 0){
+          realThiRow = <select ref="third">
+                {ThiRow}
+              </select>
+        }else{
+          realThiRow = "";
+        }
+    
+        return (
+            <div>
+              <select onChange={this.FirCityChange} ref="first">
+                {FirRow}
+              </select>
+              <select onChange={this.SecCityChange} ref="second" defaultValue={this.state.resetSec}>
+                 {SecRow}
+              </select>
+              {realThiRow}
+            </div>
+          );
+      }
+    });
+    var citys = [
+        {
+          name:'北京',
+          array:[
+            {
+              name:'通州区',
+              array:['通州区1','通州区2','通州区3','通州区4']
+            },{
+              name:'朝阳区',
+              array:['朝阳区1','朝阳区2','朝阳区3','朝阳区4']
+            },{
+              name:'大兴区',
+              array:[]
+            }
+          ]
+        },{
+          name:'四川省',
+          array:[
+            {
+              name:'遂宁市',
+              array:['遂宁市1','遂宁市2','遂宁市3','遂宁市4']
+            },{
+              name:'成都市',
+              array:['成都市1','成都市2','成都市3','成都市4']
+            },{
+              name:'绵阳市',
+              array:['绵阳市1','绵阳市2','绵阳市3','绵阳市4']
+            },{
+              name:'德阳市',
+              array:['德阳市1','德阳市2','德阳市3','德阳市4']
+            }
+          ]
+        },{
+          name:'二级省',
+          array:[
+            {
+              name:'二级省1',
+              array:[]
+            },{
+              name:'二级省2',
+              array:[]
+            },{
+              name:'二级省3',
+              array:[]
+            }
+          ]
+        }
+
+    ]
+    React.render(
+      <MainMap citys={citys}/>,
+      document.getElementById("container")
+      )
+    </script>
+</html>
