@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>menu1.html</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+      <script src="js/react.js"></script>
+      <script src="js/JSXTransformer.js"></script>
+      <style>
+      </style>
+  </head>
+  <body>
+  <div id="container">
+     
+
+  </div>
+  </body>
+
+    <script type="text/jsx">
+  var SearchBar = React.createClass({
+    HandleChange2:function(){
+        var _self = this;
+        _self.props.HandleChanges(_self.refs.checkboxs.getDOMNode().checked);
+    },
+    HandleKeyUp:function(){
+        this.props.changeKeyWord(this.refs.textInput.getDOMNode().value);
+    },
+    render:function(){
+        return (
+                <div>
+                <input type="text" placeholder="Search.." ref="textInput" onKeyUp={this.HandleKeyUp}/>
+                    <p>
+                        <label>
+                            <input type="checkbox" ref="checkboxs" onChange={this.HandleChange2}/>  {" "}
+                            Only show products in stock
+                        </label>    
+                    </p>
+               
+               
+                </div>
+            );
+        }
+      });
+    var CreateTh = React.createClass({
+        render:function(){
+            var _self = this;
+            var keyWord = _self.props.keyWord.toLowerCase();
+            var TdRow = this.props.product.arr.map(function(item,index){
+                var searchKeyWord = item.name.toLowerCase();
+                if(_self.props.stocked === true){
+                    if(item.stocked === true && (searchKeyWord.indexOf(keyWord) >-1 || keyWord.indexOf(searchKeyWord) > -1) ){
+                        return <CreateTd key={index}  Item={item}/>
+                    }
+                }else{
+                    if(searchKeyWord.indexOf(keyWord) >-1 || keyWord.indexOf(searchKeyWord) > -1){
+                        return <CreateTd key={index} Item={item}/>
+                    }
+                   
+                }
+            });
+            return (
+                    <tbody>
+                    <tr><th colSpan="2">{this.props.product.category}</th></tr>
+                        {TdRow}
+                    </tbody>    
+                    );
+        }
+    });
+    var CreateTd = React.createClass({
+        
+        render:function(){
+            var item = this.props.Item;
+            var name = item.stocked === true?<span style={{color:"red"}}>{item.name}</span>:item.name;
+            return (
+                <tr>
+                    <td>{name}</td>
+                    <td>{item.price}</td>
+                 </tr>    
+                    );
+        }
+    });
+  var FilterableProductTable = React.createClass({
+    getInitialState:function(){
+        return {
+            keyWord:"",
+            stocked:this.props.stocked
+        }
+    },
+    HandleChange:function(flag){
+        this.setState({
+            stocked:flag
+          });
+   },
+   ChangeKeyWord:function(keyWord){
+        this.setState({
+            keyWord:keyWord
+          });
+   },
+    render:function(){
+        var _self = this;
+        var ThRow = this.props.products.map(function(product,index){
+            return <CreateTh key={index} keyWord={_self.state.keyWord} product={product} stocked={_self.state.stocked} />
+        });
+
+           return (
+            <div>
+                <SearchBar HandleChanges={_self.HandleChange} changeKeyWord={this.ChangeKeyWord}/>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                        {ThRow} 
+                </table>
+            </div>
+            ); 
+    }
+  })
+
+  var   PRODUCTS = [
+                {
+                    category:"Sporting-Goods",
+                    arr : [
+                          {price: '$49.99', stocked: false, name: 'Football'},
+                          {price: '$9.99', stocked: true, name: 'Baseball'},
+                          {price: '$29.99', stocked: false, name: 'Basketball'}
+                        ]
+                    },
+                    {
+                    category:"Electronics",
+                    arr : [
+                          {price: '$99.99', stocked: true, name: 'iPod Touch'},
+                          {price: '$399.99', stocked: false, name: 'iPhone 5'},
+                          {price: '$199.99', stocked: true, name: 'Nexus 7'}
+                        ]
+                    }
+  ];
+React.render(
+    <FilterableProductTable products={PRODUCTS} stocked={false}/>,
+    document.getElementById('container')
+);
+
+    </script>
+</html>
