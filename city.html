@@ -50,6 +50,20 @@
          this.refs.third.value = 0;
         
       },
+      seeCitys:function(){ //查看选择了哪些城市
+      var _self = this,
+          citys = _self.props.citys,
+          firstValue = this.refs.first.value,
+          secondValue = this.refs.second.value,
+          shi = citys[firstValue].name +' ',
+          xian = citys[firstValue].array[secondValue].name + ' ',
+          qu = '';
+          if(this.refs.third){
+            qu = citys[firstValue].array[secondValue].array[this.refs.third.value];
+          }
+          
+      alert("你选择的城市是："+shi+xian+qu);
+      },
       render:function(){
         var _self = this;
         var citys = _self.props.citys;
@@ -80,6 +94,7 @@
                  {SecRow}
               </select>
               {realThiRow}
+              <button type="button" onClick={this.seeCitys}>点我查看选择情况</button>
             </div>
           );
       }
