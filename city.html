@@ -57,10 +57,7 @@
           secondValue = this.refs.second.value,
           shi = citys[firstValue].name +' ',
           xian = citys[firstValue].array[secondValue].name + ' ',
-          qu = '';
-          if(this.refs.third){
-            qu = citys[firstValue].array[secondValue].array[this.refs.third.value];
-          }
+          qu = this.refs.third?citys[firstValue].array[secondValue].array[this.refs.third.value]:'';
           
       alert("你选择的城市是："+shi+xian+qu);
       },
