@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>floor</title>
+	<style>
+	*{
+		padding: 0;
+		margin:0;
+		list-style-type:none; 
+	}
+	#box{
+		width: 960px;
+		margin:0 auto;
+		position: relative;
+	}
+	#box ul{
+		float: left;
+
+	}
+	#box ul li{
+		/*width: 300px;*/
+		/*margin: 0 10px;*/
+		background-color: #f3f3f3;
+	}
+	</style>
+	<script>
+	window.onload = function(){
+		var winHeight = document.documentElement.clientHeight
+		var oBox = document.getElementById("box");
+		var oUl = oBox.getElementsByTagName("ul");
+		//获取最低高度的UL
+		function getMixHeight(){
+			var index =0;
+			var height=10000000000;
+			for(var i = 0;i<oUl.length;i++){
+				if(oUl[i].offsetHeight < height){
+					height  = oUl[i].clientHeight;
+					index = i;
+				}
+			}
+			return index;
+		}
+
+		//添加瀑布流节点
+		function floor(){
+			for(var i=0;i<18;i++){
+				var Oli = document.createElement("li");
+					Oli.style.width = "300px";
+					Oli.style.margin = "0 10px";
+					Oli.style.marginBottom = "10px";
+					Oli.style.height = getRandom()+"px";
+				var index = getMixHeight();	
+
+				oUl[index].appendChild(Oli);
+			}
+		}
+
+		//生成随机数
+		function getRandom(){
+			return Math.floor(Math.random()*100)+230;
+		}
+		floor();
+
+		window.onscroll = function(){
+			var scrollTop = document.body.scrollTop||document.documentElement.scrollTop;
+			if(scrollTop + winHeight >= document.documentElement.scrollHeight - 300){
+				floor();
+			}
+		}
+	}
+
+	</script>
+</head>
+<body>
+	<div id="box">
+		<ul></ul>
+		<ul></ul>
+		<ul></ul>
+	</div>
+</body>
+</html>
