@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>floorPosition</title>
+	<style>
+	*{
+		padding: 0;
+		margin:0;
+		list-style-type:none; 
+	}
+	#box{
+		width: 960px;
+		margin:0 auto;
+		position: relative;
+	}
+	#box ul{
+		float: left;
+
+	}
+	#box ul li{
+		/*width: 300px;*/
+		/*margin: 0 10px;*/
+		background-color: #f3f3f3;
+	}
+	</style>
+	<script>
+	window.onload = function(){
+		var OBox = document.getElementById("box");
+		//获取浏览器的宽度和高度
+		var VH = document.documentElement.clientHeight;
+		var VW = document.documentElement.clientWidth;
+
+		//计算容器内div个数，使用Matn.floor向下取整
+		var default_width = 230+16;
+		var div_num = Math.floor(VW / default_width);
+
+		//获取剩余空间设置居中
+		OBox.style.width = default_width*div_num +'px';
+		OBox.style.height = '100%';
+		OBox.style.backgroundColor = '#e2e2e2';
+		OBox.style.margin = '0 auto';
+
+
+
+		//初始化一个高度数组
+		var arrHeight = [0,0,0,0,0];
+		createElement();
+		function createElement(){
+			//循环创建数组
+			for(var a = 1;a<=18;a++){
+				var ODiv = document.createElement("div");
+
+				ODiv.style.width = 230+'px';
+				// ODiv.style.border = "1px solid #000";
+				var randomHeight = Math.ceil(Math.random()*(350-250)+250);
+
+				ODiv.style.backgroundColor = "rgb("+parseInt(Math.random()*(256-1)+1)+","+parseInt(Math.random()*(256-1)+1)+","+parseInt(Math.random()*(256-1)+1)+")";
+
+				ODiv.style.height = randomHeight + 'px';
+				ODiv.innerHTML = a;
+				ODiv.style.position = "absolute";
+
+				//获取最小列
+				var min_index = checkHeight(arrHeight);
+
+				//设置div定位
+				ODiv.style.top = arrHeight[min_index] + 'px';
+				ODiv.style.left = default_width* min_index + 'px';
+				// ODiv.style.marginLeft = "8px";
+
+				//跟随内容
+				OBox.appendChild(ODiv);
+
+				//更新高度数组
+				arrHeight[min_index] += ODiv.offsetHeight + 8;
+			}
+		}
+		
+		
+		//滚动加载
+		window.onscroll = function(){
+			var ST = document.documentElement.scrollTop || document.body.scrollTop;
+			//滚动条+浏览器的高度 = 内容区域的高度
+			if(ST + VH >document.body.scrollHeight * 0.8){
+				createElement();
+			}
+		}
+	}
+	function checkHeight(obj){
+		var index = 0;
+		var height = 100000000;
+
+		for(var i=0;i<height;i++){
+			var now_height = obj[i];
+			if(now_height < height){
+				height = now_height;
+				index = i;
+			}
+		}
+
+		return index ;
+		
+	}
+</script>
+</head>
+<body>
+	<div id="box">
+	</div>
+</body>
+</html>
